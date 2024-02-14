@@ -1,0 +1,13 @@
+{
+  "defaultEnv": {
+    "driver": "pg",
+    "user": "user",
+    "password": "password",
+    "host": "localhost",
+    "port": 5432,
+    "database": "database",
+    "schemaTable": "pgmigrations",
+    "directory": "./src/migrations",
+    "migrationSource": "./build/migrations"
+  }
+}
