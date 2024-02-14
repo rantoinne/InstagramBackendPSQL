@@ -1,6 +1,12 @@
 import { Model, RelationMappings } from 'objection';
 import Post from './Post';
 import User from './User';
+import knexConfig from '../config/knex';
+import Knex from 'knex';
+
+const knex = Knex(knexConfig);
+
+Model.knex(knex);
 
 class Comment extends Model {
   static tableName = 'comments';

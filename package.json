@@ -7,12 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node build/index.js",
     "migrate": "node-pg-migrate -m src/migrations",
-    "migrate:up": "node-pg-migrate up",
+    "migrate:up": "eval $(grep '^DATABASE_URL' .env) node-pg-migrate up -m build/migrations",
     "back:copy-assets": "npx copyfiles src/assets/**/* build/ --up 1 --exclude \"**/*.ts\"",
     "build": "tsc -p src || true && npm run back:copy-assets",
-    "back:dev": "npm run build && concurrently -n \"JS,TS\" -c \"yellow,cyan\" \"npm run back:watch:server\" \"npm run back:watch:typescript\"",
+    "back:dev": "npx nodemon build/index.js && tsc -p src --preserveWatchOutput --watch",
     "back:watch:server": "export TZ=UTC && npx nodemon build/index.js --watch src --watch .env --delay 1",
-    "back:watch:typescript": "tsc -p server --preserveWatchOutput --watch"
+    "back:watch:typescript": "tsc -p src --preserveWatchOutput --watch"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
   "dependencies": {
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
+    "knex": "^3.1.0",
     "node-pg-migrate": "^6.2.2",
     "objection": "^3.1.4",
     "pg": "^8.11.3",

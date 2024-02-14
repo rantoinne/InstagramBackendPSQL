@@ -1,16 +1,31 @@
 import { MigrationBuilder } from 'node-pg-migrate';
+import { POST_TYPE } from '../models';
 
 export const up = (pgm: MigrationBuilder) => {
-  // pgm.createTable('users', {
-  //   id: { type: 'serial', primaryKey: true },
-  //   username: { type: 'varchar(100)', notNull: true },
-  //   email: { type: 'varchar(100)', notNull: true, unique: true },
-  //   password: { type: 'varchar(255)', notNull: true },
-  //   created_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
-  //   updated_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
-  // });
+  pgm.createTable('posts', {
+    id: { type: 'bigserial', primaryKey: true },
+    post_type: {
+      type: 'varchar(14)',
+      notNull: true,
+      check: `post_type in ('${POST_TYPE.IMAGE}', '${POST_TYPE.IMAGE_CAROUSEL}', '${POST_TYPE.VIDEO}')`,
+    },
+    post_url: { type: 'varchar(255)', notNull: true, unique: true },
+    description: { type: 'varchar(255)', notNull: true },
+    likes_count: { type: 'integer', notNull: true },
+    comments_count: { type: 'integer', notNull: true },
+    user_id: {
+      type: 'bigserial',
+      notNull: true,
+      references: 'users(id)',
+      onDelete: 'CASCADE'
+    },
+
+    created_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
+    updated_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
+    deleted_at: { type: 'timestamp', notNull: false, default: pgm.func('current_timestamp') },
+  });
 };
 
 export const down = (pgm: MigrationBuilder) => {
-  // pgm.dropTable('users');
+  pgm.dropTable('posts');
 };

@@ -1,5 +1,11 @@
 import { Model, RelationMappings } from 'objection';
 import User from './User';
+import knexConfig from '../config/knex';
+import Knex from 'knex';
+
+const knex = Knex(knexConfig);
+
+Model.knex(knex);
 
 export enum POST_TYPE {
   VIDEO = 'VIDEO',
@@ -14,8 +20,9 @@ class Post extends Model {
   post_type!: POST_TYPE;
   post_url!: string;
   description!: string;
-  post_like_count!: number;
-  post_comments_count!: number;
+  likes_count!: number;
+  comments_count!: number;
+  user_id!: number;
 
   // Associated identifiers
   user!: User;
