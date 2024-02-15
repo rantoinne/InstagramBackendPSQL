@@ -1,11 +1,5 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, ModelObject, RelationMappings } from 'objection';
 import User from './User';
-import knexConfig from '../config/knex';
-import Knex from 'knex';
-
-const knex = Knex(knexConfig);
-
-Model.knex(knex);
 
 export enum POST_TYPE {
   VIDEO = 'VIDEO',
@@ -39,5 +33,7 @@ class Post extends Model {
     }
   };
 }
+
+export type PostType = ModelObject<Post>;
 
 export default Post;

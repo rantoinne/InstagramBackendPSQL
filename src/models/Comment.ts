@@ -1,12 +1,6 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, ModelObject, RelationMappings } from 'objection';
 import Post from './Post';
 import User from './User';
-import knexConfig from '../config/knex';
-import Knex from 'knex';
-
-const knex = Knex(knexConfig);
-
-Model.knex(knex);
 
 class Comment extends Model {
   static tableName = 'comments';
@@ -55,5 +49,7 @@ class Comment extends Model {
     }
   };
 }
+
+export type CommentType = ModelObject<Comment>;
 
 export default Comment;

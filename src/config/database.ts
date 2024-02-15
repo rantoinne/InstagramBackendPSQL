@@ -1,13 +1,19 @@
 import { Pool } from 'pg';
+import Knex from 'knex';
+import { Model } from 'objection';
+import knexConfig from './knex';
+
+const connectDb = () => {
+  const db = Knex(knexConfig);
+  Model.knex(db);
+}
 
 const pool = new Pool({
   user: 'user',
-  host: 'postgres',
+  host: 'localhost',
   database: 'database',
   password: 'password',
   port: 5432,
 });
 
-// DATABASE_URL=postgres://user:password@localhost:5432/database
-
-export default pool;
+export { pool, connectDb };

@@ -1,16 +1,14 @@
-import { Model, RelationMappings } from 'objection';
-import Knex from 'knex';
+import { Model, ModelObject, QueryContext, RelationMappings } from 'objection';
+import bcrypt from 'bcrypt';
 import Post from './Post';
 import Comment from './Comment';
 import PostLike from './PostLike';
-import knexConfig from '../config/knex';
+import { HASHING_SALT_ROUNDS } from '../config/constants';
 
-const knex = Knex(knexConfig);
-
-Model.knex(knex);
-
-class User extends Model {
-  static tableName = 'users';
+export class User extends Model {
+  static get tableName() {
+    return 'users';
+  }
   
   id!: number;
   name!: string;
@@ -50,6 +48,18 @@ class User extends Model {
       }
     }
   };
+
+  // Hooks
+  async $beforeInsert(queryContext: QueryContext) {
+    await super.$beforeInsert(queryContext);
+    
+    // Hash the password before inserting it into the database
+    if (this.hashed_password) {
+      this.hashed_password = await bcrypt.hash(this.hashed_password, HASHING_SALT_ROUNDS);
+    }
+  }
 }
+
+export type UserType = ModelObject<User>;
 
 export default User;

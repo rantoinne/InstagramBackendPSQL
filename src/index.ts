@@ -1,23 +1,65 @@
 require('dotenv').config();
 import express, { Request, Response } from 'express';
-// import { Pool } from 'pg';
-import pool from './config/database';
+import logger from 'morgan';
+import { connectDb, pool } from './config/database';
 import User from './models/User';
+import routes from './routes';
+import { isDev, isProd } from './config/constants';
+import { reqType } from './config/types';
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use(express.raw({ type: 'application/xml', limit: '10mb' }));
+app.use(express.raw({ type: 'text/xml', limit: '5mb' }));
+
+if (isDev) app.use(logger('dev'));
+if (isProd) {
+  app.use(logger('common', {
+    skip: (req: reqType) => {
+      if (req.url === '/graphql') return true;
+      return false;
+    },
+  }));
+}
+
+connectDb();
+routes(app);
 
 app.get('/ping', async (req: Request, res: Response) => {
     try {
-        const { rows } = await pool.query('SELECT NOW() as now');
+        const rows = await pool.query('SELECT NOW() as now');
         const user = await User.query().findById(1);
-        res.send(`Server time: ${user!.id}`);
+        res.send(`Server time: ${JSON.stringify(user)}`);
     } catch (error) {
         console.error('Error querying database:', error);
         res.status(500).send('Internal server error');
     }
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+const closeHandler = () => {
+    try {
+        // process reload or close happening
+        // close connections, clear cache, etc
+        server.close(async () => {
+        await Promise.all([
+            await pool.end(),
+        ]);
+        console.log('Bye bye.');
+        process.exit(0);
+        });
+    } catch (e) {
+        process.exit(1);
+    }
+    };
+  
+process.on('SIGINT', closeHandler);
+process.on('SIGTERM', closeHandler);
+process.on('SIGQUIT', closeHandler);
+
+module.exports = server;

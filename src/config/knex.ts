@@ -1,13 +1,16 @@
 import { Knex } from 'knex';
 
 const knexConfig: Knex.Config = {
-  client: 'pg',
+  client: 'postgresql',
   connection: {
-    host: 'postgres',
     user: 'user',
     password: 'password',
     database: 'database',
   },
+  pool: {
+    min: 2,
+    max: 10,
+  }
 };
 
 export default knexConfig;

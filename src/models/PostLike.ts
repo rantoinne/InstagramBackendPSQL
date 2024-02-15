@@ -1,12 +1,6 @@
-import { Model, RelationMappings } from 'objection';
-import Knex from 'knex';
+import { Model, ModelObject, RelationMappings } from 'objection';
 import Post from './Post';
 import User from './User';
-import knexConfig from '../config/knex';
-
-const knex = Knex(knexConfig);
-
-Model.knex(knex);
 
 class PostLike extends Model {
   static tableName = 'post_likes';
@@ -39,5 +33,7 @@ class PostLike extends Model {
     }
   };
 }
+
+export type PostLikeType = ModelObject<PostLike>;
 
 export default PostLike;
