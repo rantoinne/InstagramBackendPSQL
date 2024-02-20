@@ -25,7 +25,7 @@ export class User extends Model {
   static relationMappings: RelationMappings = {
     posts: {
       relation: Model.HasManyRelation,
-      modelClass: __dirname + '/Post',
+      modelClass: Post,
       join: {
         from: 'users.id',
         to: 'posts.user_id'
@@ -33,7 +33,7 @@ export class User extends Model {
     },
     comments: {
       relation: Model.HasManyRelation,
-      modelClass: __dirname + '/Comment',
+      modelClass: Comment,
       join: {
         from: 'users.id',
         to: 'comments.user_id'
@@ -41,7 +41,7 @@ export class User extends Model {
     },
     post_likes: {
       relation: Model.HasManyRelation,
-      modelClass: __dirname + '/PostLike',
+      modelClass: PostLike,
       join: {
         from: 'users.id',
         to: 'post_likes.user_id'

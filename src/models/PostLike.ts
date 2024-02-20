@@ -17,7 +17,7 @@ class PostLike extends Model {
   static relationMappings: RelationMappings = {
     post: {
       relation: Model.BelongsToOneRelation,
-      modelClass: __dirname + '/Post',
+      modelClass: Post,
       join: {
         from: 'posts.id',
         to: 'post_likes.post_id'
@@ -25,7 +25,7 @@ class PostLike extends Model {
     },
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: __dirname + '/User',
+      modelClass: User,
       join: {
         from: 'users.id',
         to: 'post_likes.user_id'

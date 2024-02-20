@@ -33,7 +33,7 @@ class Comment extends Model {
   static relationMappings: RelationMappings = {
     post: {
       relation: Model.BelongsToOneRelation,
-      modelClass: __dirname + '/Post',
+      modelClass: Post,
       join: {
         from: 'posts.id',
         to: 'comments.post_id'

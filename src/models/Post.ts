@@ -25,7 +25,7 @@ class Post extends Model {
   static relationMappings: RelationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: __dirname + '/User',
+      modelClass: User,
       join: {
         from: 'users.id',
         to: 'posts.user_id'

@@ -11,4 +11,7 @@ export default function userRoutes(app: express.Application) {
   app
     .route(`${apiUserRouteURL}/login`)
     .post(userController.loginUser);
+  app
+    .route(`${apiUserRouteURL}/name-available`)
+    .get(userController.userNameAvailable);
 }

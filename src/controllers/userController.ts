@@ -37,7 +37,7 @@ const loginUser = async (req: reqType, res: resType, _next: nextType): Promise<v
   if (!userName || !password) throw new Error('All fields are mandatory!');
 
   const user: UserType | undefined = await getUserByAttribute('user_name', userName);
-  if (!user) throw new Error(`No user exits with user name - ${userName}`);
+  if (!user) throw new Error(`No user exists with user name - ${userName}`);
 
   const { hashed_password: hashedPassword } = user;
   const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
@@ -49,7 +49,20 @@ const loginUser = async (req: reqType, res: resType, _next: nextType): Promise<v
   res.status(200).json({ token, ...user });
 };
 
+const userNameAvailable = async (req: reqType, res: resType, _next: nextType): Promise<void> => {
+  const {
+    userName,
+  } = req.body;
+  let userNameAvailable = true;
+  const userExists = await getUserByAttribute('user_name', userName);
+
+  if (userExists) userNameAvailable = false;
+
+  res.status(200).json({ userNameAvailable });
+};
+
 export default {
   createUser: asyncWrapper(createUser),
   loginUser: asyncWrapper(loginUser),
+  userNameAvailable: asyncWrapper(userNameAvailable),
 }
