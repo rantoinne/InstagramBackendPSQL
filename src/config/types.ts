@@ -9,7 +9,7 @@ declare global {
     interface Request {
       user?: {
         type: string;
-        userId: number;
+        id: number;
       };
       originalBody: any;
     }

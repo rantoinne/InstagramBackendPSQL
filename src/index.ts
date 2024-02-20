@@ -1,5 +1,6 @@
 require('dotenv').config();
 import express, { Request, Response } from 'express';
+import session from 'express-session';
 import logger from 'morgan';
 import { connectDb, pool } from './config/database';
 import User from './models/User';
@@ -25,6 +26,19 @@ if (isProd) {
 }
 
 connectDb();
+
+app.use(session({
+    name: 'instagram_session',
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge  : 30 * 24 * 60 * 60 * 1000, // 30 days
+      },
+      secret: process.env.COOKIE_SECRET || 'secret',
+}))
+
 routes(app);
 
 app.get('/ping', async (req: Request, res: Response) => {
