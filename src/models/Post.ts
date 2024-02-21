@@ -10,6 +10,10 @@ export enum POST_TYPE {
 class Post extends Model {
   static tableName = 'posts'
 
+  static get idColumn() {
+    return 'id';
+  }
+
   id!: number;
   post_type!: POST_TYPE;
   post_url!: string;
@@ -25,7 +29,7 @@ class Post extends Model {
   static relationMappings: RelationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
-      modelClass: User,
+      modelClass: __dirname + '/User',
       join: {
         from: 'users.id',
         to: 'posts.user_id'

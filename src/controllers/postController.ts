@@ -1,7 +1,7 @@
 import { nextType, reqType, resType } from '../config/types';
 import fs from 'fs';
 import asyncWrapper from '../utils/asyncWrapper';
-import { createPost } from '../services/postService';
+import { createPost, getPostsForFeed } from '../services/postService';
 import { UserType } from '../models';
 
 const createNewPost = async (req: reqType, res: resType, _next: nextType): Promise<void> => {
@@ -29,6 +29,18 @@ const createNewPost = async (req: reqType, res: resType, _next: nextType): Promi
   });
 };
 
+export const getPostsFeed = async (req: reqType, res: resType, _next: nextType): Promise<void> => {
+  const userInfo = req.user as unknown as UserType;
+
+  // Get followed user
+  // Get recent posts
+  // Limit the results for pagination
+  // Share response
+  const posts = await getPostsForFeed();
+  res.status(200).json(posts);
+};
+
 export default {
   createNewPost: asyncWrapper(createNewPost),
+  getPostsFeed: asyncWrapper(getPostsFeed),
 }

@@ -8,4 +8,7 @@ export default function postRoutes(app: express.Application) {
   app
     .route(`${apiPostRouteURL}/create`)
     .post(authAppOrWeb, uploadMedia.fields([{ name: 'image', maxCount: 1 }]), postController.createNewPost);
+  app
+    .route(`${apiPostRouteURL}/get-feed`)
+    .get(authAppOrWeb, postController.getPostsFeed);
 }

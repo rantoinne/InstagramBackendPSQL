@@ -11,8 +11,8 @@ export const up = (pgm: MigrationBuilder) => {
     },
     post_url: { type: 'varchar(255)', notNull: true, unique: true },
     description: { type: 'varchar(255)', notNull: true },
-    likes_count: { type: 'integer', notNull: true },
-    comments_count: { type: 'integer', notNull: true },
+    likes_count: { type: 'integer', notNull: false },
+    comments_count: { type: 'integer', notNull: false },
     user_id: {
       type: 'bigserial',
       notNull: true,

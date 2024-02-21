@@ -5,6 +5,10 @@ import User from './User';
 class PostLike extends Model {
   static tableName = 'post_likes';
 
+  static get idColumn() {
+    return 'id';
+  }
+  
   id!: number;
   user_id!: number;
   post_id!: number;

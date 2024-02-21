@@ -7,6 +7,7 @@ export const up = (pgm: MigrationBuilder) => {
     user_name: { type: 'varchar(50)', notNull: true, unique: true },
     email: { type: 'varchar(100)', notNull: true, unique: true },
     hashed_password: { type: 'varchar(255)', notNull: true },
+    avatar: { type: 'varchar(500)', notNull: false },
 
     created_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },
     updated_at: { type: 'timestamp', notNull: true, default: pgm.func('current_timestamp') },

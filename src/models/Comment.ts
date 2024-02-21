@@ -5,6 +5,10 @@ import User from './User';
 class Comment extends Model {
   static tableName = 'comments';
 
+  static get idColumn() {
+    return 'id';
+  }
+
   id!: number;
   comment_text!: string;
   user_id!: number;

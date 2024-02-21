@@ -14,3 +14,19 @@ export const createPost = async (
   });
   return post;
 };
+
+export const getPostsForFeed = async (): Promise<PostType[]> => {
+  const posts = await Post.query()
+    .select(
+      'posts.id',
+      'posts.post_type',
+      'posts.post_url',
+      'posts.description',
+      'posts.comments_count',
+      'posts.likes_count',
+      'users.user_name',
+      'users.name',
+    )
+    .innerJoin('users', 'users.id', 'posts.user_id')
+  return posts;
+};

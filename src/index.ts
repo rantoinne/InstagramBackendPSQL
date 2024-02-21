@@ -7,6 +7,7 @@ import User from './models/User';
 import routes from './routes';
 import { isDev, isProd } from './config/constants';
 import { reqType } from './config/types';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,15 +15,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.raw({ type: 'application/xml', limit: '10mb' }));
 app.use(express.raw({ type: 'text/xml', limit: '5mb' }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 if (isDev) app.use(logger('dev'));
 if (isProd) {
-  app.use(logger('common', {
-    skip: (req: reqType) => {
-      if (req.url === '/graphql') return true;
-      return false;
-    },
-  }));
+  app.use(logger('common'));
 }
 
 connectDb();

@@ -9,12 +9,17 @@ export class User extends Model {
   static get tableName() {
     return 'users';
   }
+
+  static get idColumn() {
+    return 'id';
+  }
   
   id!: number;
   name!: string;
   email!: string;
   hashed_password!: string;
   user_name!: string;
+  avatar!: string;
 
   // Associated identifiers
   posts?: Post[];
