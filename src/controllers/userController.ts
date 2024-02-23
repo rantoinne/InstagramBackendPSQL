@@ -39,12 +39,13 @@ const loginUser = async (req: reqType, res: resType, _next: nextType): Promise<v
   const user: UserType | undefined = await getUserByAttribute('user_name', userName);
   if (!user) throw new Error(`No user exists with user name - ${userName}`);
 
-  const { hashed_password: hashedPassword } = user;
+  const { hashed_password: hashedPassword = '' } = user;
   const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
 
   if (!isPasswordCorrect) throw new Error('Password incorrect!');
 
   const token = generateToken(user);
+  delete user.hashed_password;
 
   res.status(200).json({ token, ...user });
 };

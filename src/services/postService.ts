@@ -26,6 +26,7 @@ export const getPostsForFeed = async (): Promise<PostType[]> => {
       'posts.likes_count',
       'users.user_name',
       'users.name',
+      'users.avatar',
     )
     .innerJoin('users', 'users.id', 'posts.user_id')
   return posts;

@@ -17,7 +17,7 @@ export class User extends Model {
   id!: number;
   name!: string;
   email!: string;
-  hashed_password!: string;
+  hashed_password?: string;
   user_name!: string;
   avatar!: string;
 
