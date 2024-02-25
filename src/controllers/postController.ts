@@ -4,7 +4,14 @@ import asyncWrapper from '../utils/asyncWrapper';
 import { createPost, getPostsForFeed } from '../services/postService';
 import { UserType } from '../models';
 
-const createNewPost = async (req: reqType, res: resType, _next: nextType): Promise<void> => {
+const createNewPost = async (req: reqType, res: resType): Promise<void> => {
+  // console.log(req.body.file);
+  // console.log(req.body);
+  // const img = req.body.image;
+  // if (!img) {
+  //   console.log("no image");
+  // }
+
   const { description } = req.body;
 
   const userInfo = req.user as unknown as UserType;
@@ -18,11 +25,11 @@ const createNewPost = async (req: reqType, res: resType, _next: nextType): Promi
   
   // By this point image is saved on disk
 
-  const imageFilePath = `${image.destination}${image.originalname}`;
+  const imageFilePath = `${image.destination}${(image.originalname as string).split(' ').join('_')}`;
 
   fs.renameSync(image.path, imageFilePath);
 
-  const newPost = await createPost(imageFilePath, userInfo, description)
+  const newPost = await createPost(`${process.env.BASE_URL}/${imageFilePath}`, userInfo, description)
 
   res.status(200).json({
     post: newPost,
