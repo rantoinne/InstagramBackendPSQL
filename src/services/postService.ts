@@ -18,16 +18,15 @@ export const createPost = async (
 export const getPostsForFeed = async (): Promise<PostType[]> => {
   const posts = await Post.query()
     .select(
-      'posts.id',
-      'posts.post_type',
-      'posts.post_url',
-      'posts.description',
-      'posts.comments_count',
-      'posts.likes_count',
+      'posts.*',
       'users.user_name',
       'users.name',
       'users.avatar',
     )
-    .innerJoin('users', 'users.id', 'posts.user_id')
+    .leftJoin('users', 'users.id', 'posts.user_id')
+    .leftJoin('post_likes', 'post_likes.post_id', 'posts.id')
+    .leftJoin('comments', 'comments.post_id', 'posts.id')
+    // .select('*')
+    // .select('*')
   return posts;
 };

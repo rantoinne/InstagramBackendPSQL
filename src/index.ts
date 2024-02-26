@@ -6,7 +6,6 @@ import { connectDb, pool } from './config/database';
 import User from './models/User';
 import routes from './routes';
 import { isDev, isProd } from './config/constants';
-import { reqType } from './config/types';
 import path from 'path';
 
 const app = express();

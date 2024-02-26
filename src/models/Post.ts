@@ -1,5 +1,7 @@
 import { Model, ModelObject, RelationMappings } from 'objection';
 import User from './User';
+import Comment from './Comment';
+import PostLike from './PostLike';
 
 export enum POST_TYPE {
   VIDEO = 'VIDEO',
@@ -24,6 +26,8 @@ class Post extends Model {
 
   // Associated identifiers
   user!: User;
+  comments?: Comment[];
+  likes?: PostLike[];
 
   // Associations
   static relationMappings: RelationMappings = {
@@ -33,6 +37,22 @@ class Post extends Model {
       join: {
         from: 'users.id',
         to: 'posts.user_id'
+      }
+    },
+    comments: {
+      relation: Model.HasManyRelation,
+      modelClass: __dirname + '/Comment',
+      join: {
+        to: 'posts.id',
+        from: 'comments.post_id'
+      }
+    },
+    likes: {
+      relation: Model.HasManyRelation,
+      modelClass: __dirname + '/PostLike',
+      join: {
+        to: 'posts.id',
+        from: 'post_likes.post_id'
       }
     }
   };
