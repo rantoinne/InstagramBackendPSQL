@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+  instagram-postgres:
+    container_name: instagram-postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./instagram-postgres:/var/lib/postgres:cached
+    working_dir: /var/lib/postgres
+    networks: 
+      - instagram-network
+
+  instagram-redis:
+    container_name: instagram-redis
+    image: redis:5.0
+    restart: always
+    ports:
+      - 6379:6379
+    networks: 
+      - instagram-network
+
+
+  instagram-node:
+    container_name: instagram-node
+    image: node:16.20.2
+    volumes:
+      - ./:/usr/src/instagram-node:cached
+      # - ./node_modules:/usr/src/instagram-node/node_modules:cached
+    working_dir: /usr/src/instagram-node
+    command: bash -c "
+      apt-get update &&
+      apt-get install -y python3 make g++ &&
+      yarn &&
+      yarn back:dev
+      echo 'Backend starting on port 8000' &&
+      tail -f /dev/null"
+    ports:
+      - 8000:8000
+    environment:
+      PORT: ${PORT}
+      NODE_ENV: ${NODE_ENV}
+      JWT_SECRET: ${JWT_SECRET}
+      COOKIE_SECRET: ${COOKIE_SECRET}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    depends_on: 
+      - instagram-postgres
+      - instagram-redis
+    networks: 
+      - instagram-network
+
+networks:
+  instagram-network:
+    driver: bridge

@@ -9,7 +9,7 @@ import UserError from '../utils/userError';
 const routes = (app: express.Application) => {
   userRoutes(app);
   postRoutes(app);
-  
+
   // NOTE: We're using a named function so it shows the name on express debugging and stack traces
   // NOTE: Don't remove "_next" on errorHandler function although it isn't used, if we remove it
   // nodejs won't know this function is for error handling

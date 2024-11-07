@@ -6,11 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node build/index.js",
-    "migrate": "node-pg-migrate -m src/migrations",
+    "migrate": "node-pg-migrate up -m build/migrations",
     "migrate:up": "eval $(grep '^DATABASE_URL' .env) node-pg-migrate up -m build/migrations",
     "back:copy-assets": "npx copyfiles src/assets/**/* build/ --up 1 --exclude \"**/*.ts\"",
     "back:build": "rm rf build && tsc -p src || true && npm run back:copy-assets",
-    "back:dev": "npm run back:build && concurrently -n \"JS,TS,ES\" -c \"yellow,cyan,magenta\" \"npm run back:watch:server\" \"npm run back:watch:typescript\" \"npm run back:lint:watch\"",
+    "back:dev": "npm run back:build && concurrently -n \"JS,TS,ES\" -c \"yellow,cyan,magenta\" \"npm run back:watch:server\" \"npm run back:watch:typescript\"",
     "back:watch:server": "export TZ=UTC && npx nodemon build/index.js --watch build --watch .env --delay 1",
     "back:watch:typescript": "tsc -p src --preserveWatchOutput --watch"
   },

@@ -39,7 +39,7 @@ routes(app);
 
 app.get('/ping', async (req: Request, res: Response) => {
     try {
-        const rows = await pool.query('SELECT NOW() as now');
+        await pool.query('SELECT NOW() as now');
         const user = await User.query().findById(1);
         res.send(`Server time: ${JSON.stringify(user)}`);
     } catch (error) {

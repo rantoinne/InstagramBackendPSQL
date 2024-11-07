@@ -3,3 +3,4 @@
 /.env
 /build
 /uploads
+.DS_Store
